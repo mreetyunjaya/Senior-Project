@@ -1,0 +1,45 @@
+{% extends "webroot/base.html" %}
+{% block content %}
+  <h3 style="color: #ffff00;text-align: center" class="mb-4">Remediations</h3>
+  {% for rem in rems %}
+    <div class="comment-container">
+      {% if user.is_authenticated %}
+        <h5 class="post-author">
+          <a class="post-author-link" href="{% url 'user-rems' rem.author.username %}">
+            {{ rem.author.username }}
+          </a>
+        </h5>
+      {% endif %}
+      <p style="float: right;color: #8a8a8a">{{ rem.date_posted|date:"F d, Y" }}</p>
+      <div class="post-section">
+        <h4 class="mt-4 ml-4"><b>Vulnerability</b>: <br><br>{{ rem.vulnerability.title }}</h4>
+        <div class="post-section">
+          <h5 class="mt-4 ml-4" style="overflow-wrap: break-word;"><b>Remediation</b>: <br><br>{{ rem.remediation|linebreaks }}</h5>
+          <div class="post-section">
+            <p class="ml-2 mt-4">Status: <b>{{ rem.status }}</b></p>
+            <p class="ml-2 mt-4">Patches: <b>{{ rem.patches }}</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No remediations were posted yet.</p>
+  {% endfor %}
+  {% if is_paginated %}
+    {% if page_obj.has_previous %}
+      <a class="btn btn-primary mb-3" href="?page=1">First</a>
+      <a class="btn btn-primary mr-4 mb-3" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <a class="btn btn-primary ml-3 mr-3 mb-3" href="?page={{ num }}">{{ num }}</a>
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a class="btn btn-primary mb-3" href="?page={{ num }}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <a class="btn btn-primary ml-4 mb-3" href="?page={{ page_obj.next_page_number }}">Next</a>
+      <a class="btn btn-primary mb-3" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+  {% endif %}
+{% endblock content %}

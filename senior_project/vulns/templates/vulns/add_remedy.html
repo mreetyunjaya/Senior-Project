@@ -1,0 +1,16 @@
+{% extends 'webroot/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="comment-container">
+    <form method="POST" class="form-group">
+      {% csrf_token %}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Remediation Post</legend>
+        {{ form|crispy }}
+      </fieldset>
+      <div class="form-group">
+        <button class="btn crumbs" type="submit">Post</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

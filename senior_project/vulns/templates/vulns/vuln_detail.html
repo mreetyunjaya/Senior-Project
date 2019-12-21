@@ -1,0 +1,53 @@
+{% extends "webroot/base.html" %}
+{% block content %}
+  <h3 style="color: #0000ff;text-align: center" class="mb-4">Vulnerability</h3>
+  <div class="post-container">
+    {% if user.is_authenticated %}
+      <h5 class="post-author">
+        <a class="post-author-link" href="{% url 'user-vulns' vuln.author.username %}">
+          {{ vuln.author.username }}
+        </a>
+      </h5>
+    {% endif %}
+    <p style="float: right;color: #8a8a8a">{{ vuln.date_posted|date:"F d, Y" }}</p>
+    <div class="post-section">
+      <h2 class="post-title">{{ vuln.title }}</h2>
+      <div class="post-section pt-3 pb-3">
+        <p class="vuln-cve">CVE <b>{{ vuln.cve }}</b></p>
+        <p class="post-date">Risk Score: {{ vuln.risk_score }}</p>
+      </div>
+    </div>
+  </div>
+  {% if vuln.author == user %}
+    <a class="btn btn-primary ml-5 mb-5" href="{% url 'vuln-update' vuln.id %}">Update</a>
+    <a class="btn btn-danger ml-2 mb-5" href="{% url 'vuln-delete' vuln.id %}">Delete</a>
+    <a class="btn btn-warning ml-5 mb-5" href="{% url 'add-remedy' vuln.id %}">Add Remediation</a>
+    <a class="btn btn-success ml-2 mb-5" href="{% url 'export-csv' vuln.id %}">Export CSV</a>
+  {% elif user.is_authenticated %}
+    <a class="btn btn-warning ml-5 mb-5" href="{% url 'add-remedy' vuln.id %}">Add Remediation</a>
+    <a class="btn btn-success ml-2 mb-5" href="{% url 'export-csv' vuln.id %}">Export CSV</a>
+  {% endif %}
+  <div style="border-top: solid 3px #ffffff"></div>
+  <h3 style="color: #ffff00;text-align: center" class="mb-3 mt-5">Remediations</h3>
+  {% for rem in vuln.rems.all %}
+    <div class="comment-container">
+      {% if user.is_authenticated %}
+        <h5 class="post-author">
+          <a class="post-author-link" href="{% url 'user-rems' vuln.author.username %}">
+            {{ rem.author.username }}
+          </a>
+        </h5>
+      {% endif %}
+      <p style="float: right;color: #8a8a8a">{{ rem.date_posted|date:"F d, Y" }}</p>
+      <div class="post-section" style="overflow-wrap: break-word;">
+        <h5 class="mt-4 ml-2">{{ rem.remediation|linebreaks }}</h5>
+        <div class="post-section">
+          <p class="ml-2 mt-4">Status: <b>{{ rem.status }}</b></p>
+          <p class="ml-2 mt-4">Patches: <b>{{ rem.patches }}</b></p>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No remediations were posted yet.</p>
+  {% endfor %}
+{% endblock content %}
