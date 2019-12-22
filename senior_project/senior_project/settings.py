@@ -1,10 +1,8 @@
 import os
 import json
 
-"""
 with open("/etc/senior-project/config.json") as config_file:
     config = json.load(config_file)
-"""
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,14 +13,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = config.get("SECRET_KEY")
-SECRET_KEY = "gnpx=sm!b$tef&&p-9r(yi*9x6p4cb$igm#25ltey%d(vde0_p"
+SECRET_KEY = config.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = False
 DEBUG = True
 
-#ALLOWED_HOSTS = ["172.104.27.86"]
-
+#ALLOWED_HOSTS = []
 
 # Application definition
 
